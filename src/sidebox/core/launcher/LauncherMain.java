@@ -10,7 +10,9 @@ import sidebox.lib.io.Out;
  * @edit 2020/12/14
  */
 public class LauncherMain {
+	public static LauncherBall launcherBall;
 	public static void main(String[] args) {
 		Out.stdPrintln("Main","launching.");
+		launcherBall=new LauncherBall(60,60);
 	}
 }
