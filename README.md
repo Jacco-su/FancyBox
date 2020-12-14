@@ -1,4 +1,4 @@
-# SideBox
+# FancyBox
 A platform for developing and loading some useful tools.Use Java to make plugins(tools) for it such as TimeDisplayer,WeatherForecast or MiniConsolePanel.
 
 # Reasons for development

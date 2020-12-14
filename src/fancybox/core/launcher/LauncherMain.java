@@ -1,6 +1,6 @@
-package sidebox.core.launcher;
+package fancybox.core.launcher;
 
-import sidebox.lib.io.Out;
+import fancybox.lib.io.Out;
 
 /**
  * bootstrap of SideBox launcher

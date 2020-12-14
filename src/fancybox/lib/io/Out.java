@@ -1,4 +1,4 @@
-package sidebox.lib.io;
+package fancybox.lib.io;
 
 /**
  * out methods for SideBox platform

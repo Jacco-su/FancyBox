@@ -1,4 +1,4 @@
-package sidebox.core.launcher;
+package fancybox.core.launcher;
 
 import javax.swing.*;
 import java.awt.*;
