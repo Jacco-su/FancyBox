@@ -13,6 +13,6 @@ public class LauncherMain {
 	public static LauncherBall launcherBall;
 	public static void main(String[] args) {
 		Out.stdPrintln("Main","launching.");
-		launcherBall=new LauncherBall(60,60);
+		launcherBall=new LauncherBall(70,70);
 	}
 }
