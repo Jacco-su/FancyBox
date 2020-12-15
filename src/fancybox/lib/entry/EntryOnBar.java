@@ -1,5 +1,6 @@
 package fancybox.lib.entry;
 
+import fancybox.core.bar.PluginBar;
 import fancybox.lib.image.ImageConvert;
 
 import javax.swing.*;
@@ -31,11 +32,11 @@ public class EntryOnBar extends JButton{
 	final static Color transparent=new Color(0,0,0,0);
 	private void init(){
 		this.setBackground(transparent);
-		this.setSize(40,40);
+		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT,PluginBar.ENTRY_WIDTH_HEIGHT);
 		//调整图像大小为40*40
-		if(icon.getWidth()>40||icon.getHeight()>40) {
+		if(icon.getWidth()>PluginBar.ENTRY_WIDTH_HEIGHT||icon.getHeight()>PluginBar.ENTRY_WIDTH_HEIGHT) {
 			ImageConvert imageConvert = new ImageConvert(icon);
-			imageConvert.changeResolutionRate(40.0 / (double) icon.getWidth());
+			imageConvert.changeResolutionRate(PluginBar.ENTRY_WIDTH_HEIGHT / (double) icon.getWidth());
 			this.icon = imageConvert.getProduct();
 		}
 	}
@@ -47,6 +48,8 @@ public class EntryOnBar extends JButton{
 	 */
 	@Override
 	public void paint(Graphics g){
+
+		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		g.drawImage(icon,0,0,this);
 	}
 }
