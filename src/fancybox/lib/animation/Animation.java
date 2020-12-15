@@ -6,9 +6,13 @@ package fancybox.lib.animation;
  * @create 2020/12/14
  * @edit 2020/12/14
  */
-public abstract class AbstractAnimation implements Runnable{
+public class Animation{
+	private Runnable runnable;
 	public void perform(){
-		Thread proxyThr = new Thread(this);
+		Thread proxyThr = new Thread(this.runnable);
 		proxyThr.start();
+	}
+	public Animation(Runnable runnable){
+		this.runnable=runnable;
 	}
 }

@@ -1,5 +1,6 @@
 package fancybox.core.launcher;
 
+import fancybox.core.bar.PluginBar;
 import fancybox.lib.io.Out;
 
 /**
@@ -10,8 +11,10 @@ import fancybox.lib.io.Out;
  */
 public class LauncherMain {
 	public static LauncherBall launcherBall;
+	public static PluginBar pluginBar;
 	public static void main(String[] args) {
 		Out.stdPrintln("Main","launching.");
 		launcherBall=new LauncherBall(70,70);
+		pluginBar=new PluginBar();
 	}
 }

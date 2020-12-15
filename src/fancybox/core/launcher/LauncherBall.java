@@ -1,6 +1,6 @@
 package fancybox.core.launcher;
 
-import fancybox.lib.animation.AbstractAnimation;
+import fancybox.lib.animation.Animation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,14 +13,12 @@ import java.awt.event.MouseMotionListener;
  * extends from JWindow,click to open launch bar and opened tabs
  * @author Rock Chin
  * @create 2020/12/14
- * @edit 2020/12/14
  */
 public class LauncherBall extends JWindow {
 	/**
 	 * drag launcher ball on screen
 	 * @author Rock Chin
 	 * @create 2020/12/14
-	 * @edit 2020/12/14
 	 */
 	private static class DragBall implements MouseMotionListener {
 
@@ -36,18 +34,22 @@ public class LauncherBall extends JWindow {
 		}
 	}
 	static Point ballPosition=new Point(),mousePositionOnScreen=new Point();
+	//change ball icon on click
+	private final static Animation ballAnimationOnClick=new Animation(()->{
+
+	});
 	/**
 	 * handle mouse event
 	 * @author Rock Chin
 	 * @create 2020/12/14
-	 * @edit 2020/12/14
 	 */
 	private static class MouseBall implements MouseListener{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			//perform animation
-
+			//perform ball animation
+			ballAnimationOnClick.perform();
+			//perform bar open animation
 		}
 
 		//record mouse info when mouse pressed on ball
