@@ -1,5 +1,7 @@
 package fancybox.core.launcher;
 
+import fancybox.lib.animation.AbstractAnimation;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -44,6 +46,7 @@ public class LauncherBall extends JWindow {
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
+			//perform animation
 
 		}
 
@@ -71,13 +74,25 @@ public class LauncherBall extends JWindow {
 	}
 
 	final static Color lightLightGray=new Color(250,250,250,215);
+	final static BasicStroke iconStroke=new BasicStroke(3);
+	public Graphics graphics;
+	final static int iconw=20,iconh=10,ix=-1,iy=3;
 	public void paint(Graphics g){
+		graphics=g;
 		//绘制阴影
 		g.setColor(new Color(0,0,0,35));
 		g.fillOval(0,0,this.getWidth(),this.getHeight());
 		//绘制一个白底圆形
 		g.setColor(lightLightGray);
 		g.fillOval(1,1,this.getWidth()-3,this.getHeight()-3);
+		//绘制图标
+		g.setColor(Color.darkGray);
+		((Graphics2D)g).setStroke(iconStroke);
+		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2-6+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2-6+iy);
+		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+iy);
+		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+6+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+6+iy);
+		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+12+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+12+iy);
+
 	}
 	public LauncherBall(int w,int h){
 		this.setAlwaysOnTop(true);

@@ -3,11 +3,10 @@ package fancybox.core.launcher;
 import fancybox.lib.io.Out;
 
 /**
- * bootstrap of SideBox launcher
+ * bootstrap of FancyBox launcher
  * this class is to launch LauncherBall and other daemon services.
  * @author Rock Chin
  * @create 2020/12/14
- * @edit 2020/12/14
  */
 public class LauncherMain {
 	public static LauncherBall launcherBall;
