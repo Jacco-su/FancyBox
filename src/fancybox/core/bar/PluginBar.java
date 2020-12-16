@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @edit 2020/12/14
  */
 public class PluginBar extends JWindow {
-	public final static int ENTRY_WIDTH_HEIGHT=50;
+	public final static int ENTRY_WIDTH_HEIGHT=60;
 	//animation to perform when bar opening
 	public final static Animation barOpening=new Animation(()->{
 //		PluginBar bar=LauncherMain.pluginBar;
@@ -61,7 +61,7 @@ public class PluginBar extends JWindow {
 	}
 	public void showBar(){
 		this.setLocation(LauncherMain.launcherBall.getWidth()/2-this.getWidth()/2+LauncherMain.launcherBall.getX()
-				,LauncherMain.launcherBall.getY()-this.getHeight()-10);
+				,LauncherMain.launcherBall.getY()-this.getHeight());
 		// perform bar open animation
 		this.setOpacity(0.0f);
 		this.setVisible(true);
