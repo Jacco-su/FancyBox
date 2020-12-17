@@ -1,6 +1,8 @@
 package fancybox.lib.ui;
 
 import fancybox.core.bar.PluginBar;
+import fancybox.core.launcher.LauncherMain;
+import fancybox.core.window.WindowManager;
 import fancybox.lib.image.ImageConvert;
 import fancybox.plugin.FBPlugin;
 
@@ -35,29 +37,35 @@ public class FBWindow extends JWindow {
 		init();
 	}
 	public void init(){
+		this.setAlwaysOnTop(true);
 		//检查图片是否需要缩放
 		if(icon.getWidth()> FBWindow.ICON_WIDTH_HEIGHT||icon.getHeight()>FBWindow.ICON_WIDTH_HEIGHT) {
 			ImageConvert imageConvert = new ImageConvert(icon);
 			imageConvert.changeResolutionRate(FBWindow.ICON_WIDTH_HEIGHT / (double) icon.getWidth());
 			this.icon = imageConvert.getProduct();
 		}
+		panel.setSize(300,300);
 		panel.setLocation(0,0);
 		panel.setLayout(null);
-		panel.setBackground(Color.white);
+		panel.setVisible(true);
 		this.setBackground(transparent);
+		this.setForeground(Color.darkGray);
 		this.setLayout(null);
-		this.add(panel);
+		super.add(panel);
+		LauncherMain.windowManager.windows.add(this);
+//		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
 	}
-
+//
 	@Override
 	public void paint(Graphics g){
+		//绘制panel的控件
+		super.paint(g);
 		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		//绘制圆角矩形底
 		g.setColor(getForeground());
-		g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),10,10);
-		//绘制panel的控件
-		super.paint(g);
+		g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),20,20);
+
 	}
 	@Override
 	public Component add(Component component){
@@ -66,8 +74,10 @@ public class FBWindow extends JWindow {
 	}
 	@Override
 	public void setSize(int w,int h){
-		panel.setSize(w,h);addNotify();
-		super.setSize(w+45,h);
+		if (!fbwVisible) {
+			panel.setSize(w, h);
+			super.setSize(w + 45, h);
+		}
 	}
 	@Override
 	public void setSize(Dimension d){
@@ -83,38 +93,77 @@ public class FBWindow extends JWindow {
 		this.panel.setBackground(bg);
 		super.setBackground(bg);
 	}
-	private boolean visible=false;
+	private boolean fbwVisible=false;
 
-	/**
-	 * 覆盖父类方法以确保返回正确可见状态
-	 * @return
-	 */
-	@Override
-	public boolean isVisible(){
-		return visible;
+	public boolean isFBWVisible(){
+		return fbwVisible;
+	}
+
+	public void setFBWVisible(boolean b){
+		if (b){
+			showFBW();
+		}else {
+			hideFBW();
+		}
+		fbwVisible=b;
+		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
+	}
+	public void showFBW(){
+		this.updateLocation();
+//		System.out.println("updated");
+		super.add(panel);
+		show();
+	}
+	public void hideFBW(){
+		super.setVisible(false);
 	}
 
 	/**
-	 * 覆盖父类方法以确保正确使用FancyBox定义的方法来显示此window
-	 * @param b
+	 * close this window
 	 */
-	@Override
-	public void setVisible(boolean b){
-		if (b){
-			show();
-		}else {
-			hide();
+	public void close(){
+		if (exitOnClose){
+			plugin.stop();
 		}
 	}
-	@Override
-	public void show(){
 
+	public void updateLocation(){
+		//取得屏幕高度
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+//		int screenWidth = (int)screenSize.getWidth();
+		int screenHeight = (int) screenSize.getHeight();
+		if (!fbwVisible) {
+			//计算已使用的总高度
+			int usedHeight = 0;
+			for (FBWindow window1 : LauncherMain.windowManager.windows) {
+				if (window1.fbwVisible)
+					usedHeight += window1.getHeight() + WindowManager.WINDOW_DISTANCE;
+			}
+			//检查是否有空间
+			if ((screenHeight - usedHeight - WindowManager.TOP_DISTANCE - WindowManager.BOTTOM_DISTANCE)
+					> this.getHeight()) {
+//				System.out.println("show");
+				super.setLocation(LauncherMain.launcherBall.getX() - this.getWidth()
+						, WindowManager.TOP_DISTANCE + usedHeight);
+			} else {
+				//移动之下的窗口
+				for (FBWindow window : LauncherMain.windowManager.windows) {
+					if (window.fbwVisible) {
+						window.setLocation(window.getX()
+								, window.getY() + this.getHeight() + WindowManager.WINDOW_DISTANCE);
+						//验证此窗口是否超出范围
+						window.updateLocation();
+					}
+				}
+				//TODO 设置此窗口位置为最上面
+			}
+		}else if(fbwVisible){
+			//如果已经在显示状态，则需要验证是否超出范围了，超出则设置visible为false
+			if (this.getY()+this.getHeight()+WindowManager.WINDOW_DISTANCE+WindowManager.BOTTOM_DISTANCE>screenHeight){
+				this.hide();
+			}
+		}
 	}
-	@Override
-	public void hide(){
-
-	}
-
 	/**
 	 * 覆盖以禁用父类的设置位置方法
 	 * @param x
