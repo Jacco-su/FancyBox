@@ -99,14 +99,15 @@ public class FBWindow extends JWindow {
 		return fbwVisible;
 	}
 
-	public void setFBWVisible(boolean b){
+	@Override
+	public void setVisible(boolean b){
 		if (b){
 			showFBW();
 		}else {
 			hideFBW();
 		}
 		fbwVisible=b;
-		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
+//		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
 	}
 	public void showFBW(){
 		this.updateLocation();
@@ -149,20 +150,21 @@ public class FBWindow extends JWindow {
 				//移动之下的窗口
 				for (FBWindow window : LauncherMain.windowManager.windows) {
 					if (window.fbwVisible) {
-						window.setLocation(window.getX()
-								, window.getY() + this.getHeight() + WindowManager.WINDOW_DISTANCE);
+//						System.out.println(window.getWidth());
+						window.shiftY( this.getHeight() + WindowManager.WINDOW_DISTANCE);
 						//验证此窗口是否超出范围
-						window.updateLocation();
+						if (window.getY()+window.getHeight()+WindowManager.WINDOW_DISTANCE>screenHeight-WindowManager.BOTTOM_DISTANCE){
+							window.setVisible(false);
+//							System.out.println(screenHeight+" "+(this.getY()+this.getHeight()+WindowManager.WINDOW_DISTANCE+WindowManager.BOTTOM_DISTANCE));
+						}
 					}
 				}
 				super.setLocation(LauncherMain.launcherBall.getX() - this.getWidth(),WindowManager.TOP_DISTANCE);
 			}
-		}else if(fbwVisible){
-			//如果已经在显示状态，则需要验证是否超出范围了，超出则设置visible为false
-			if (this.getY()+this.getHeight()+WindowManager.WINDOW_DISTANCE+WindowManager.BOTTOM_DISTANCE>screenHeight){
-				this.hide();
-			}
 		}
+	}
+	public void shiftY(int height){
+		super.setLocation(this.getX(),this.getY()+height);
 	}
 	/**
 	 * 覆盖以禁用父类的设置位置方法
