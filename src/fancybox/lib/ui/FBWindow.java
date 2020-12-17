@@ -155,7 +155,7 @@ public class FBWindow extends JWindow {
 						window.updateLocation();
 					}
 				}
-				//TODO 设置此窗口位置为最上面
+				super.setLocation(LauncherMain.launcherBall.getX() - this.getWidth(),WindowManager.TOP_DISTANCE);
 			}
 		}else if(fbwVisible){
 			//如果已经在显示状态，则需要验证是否超出范围了，超出则设置visible为false
