@@ -11,7 +11,7 @@ public abstract class FBPlugin {
 	public BufferedImage icon;
 	public String name;
 	public String description;
-	public void register(BufferedImage icon,String name,String description){
+	public void setInfo(BufferedImage icon,String name,String description){
 		this.icon=icon;
 		this.name=name;
 		this.description=description;
