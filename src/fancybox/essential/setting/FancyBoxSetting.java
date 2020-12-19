@@ -33,6 +33,7 @@ public class FancyBoxSetting extends FBPlugin {
 		settingMain=new FBWindow(this);
 		settingMain.setSize(300,300);
 		settingMain.setVisible(true);
+		settingMain.setExitOnClose(true);
 //		JWindow wn=new JWindow();
 //		wn.setSize(100,200);
 //		wn.setLocation(400,400);

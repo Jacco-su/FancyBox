@@ -18,10 +18,24 @@ import java.awt.image.BufferedImage;
  * @create 2020/12/15
  */
 public class FBWindow extends JWindow {
+	private static class ShadeBg extends JPanel{
+		ShadeBg(int w,int h){
+			this.setSize(w,h);
+		}
+		public void paint(Graphics g){
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+			g.setColor(bgGray);
+			g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),20,20);
+		}
+	}
+
 	public final static int ICON_WIDTH_HEIGHT=30;
+	private final static Color bgGray=new Color(0,0,0,100);
 	private final static Color transparent=new Color(0,0,0,0);
 	private JPanel panel=new JPanel();
-
+	private ShadeBg shadeBg;
 
 	BufferedImage icon;
 
