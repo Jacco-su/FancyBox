@@ -139,7 +139,7 @@ public class LauncherBall extends JWindow {
 		this.setAlwaysOnTop(true);
 		this.setSize(w+10,h+10);
 //		this.setOpacity(1);
-		this.setLocation(200,200);
+		this.setLocation(1700,400);
 		this.setBackground(new Color(0,0,0,0));
 //		this.getContentPane().setBackground(new Color(0,0,0,0));
 		this.addMouseMotionListener(new DragBall());
