@@ -27,15 +27,17 @@ public class EntryOnBar extends JButton{
 		this.name=plugin.name;
 		this.description=plugin.description;
 		this.plugin=plugin;
+//		System.out.println(getMouseListeners().length);
+		removeMouseListener(getMouseListeners()[0]);
 		init();
 	}
 	final static Color transparent=new Color(0,0,0,0);
 	private void init(){
 		this.setBackground(transparent);
 		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT,PluginBar.ENTRY_WIDTH_HEIGHT);
-		//调整图像大小为40*40
+			//调整图像大小为40*40
 		if(icon.getWidth()>PluginBar.ENTRY_WIDTH_HEIGHT||icon.getHeight()>PluginBar.ENTRY_WIDTH_HEIGHT) {
-			ImageConvert imageConvert = new ImageConvert(icon);
+				ImageConvert imageConvert = new ImageConvert(icon);
 			imageConvert.changeResolutionRate(PluginBar.ENTRY_WIDTH_HEIGHT / (double) icon.getWidth());
 			this.icon = imageConvert.getProduct();
 		}
@@ -44,6 +46,9 @@ public class EntryOnBar extends JButton{
 		//绘制背景版
 		Graphics ig=bgImage.getGraphics();
 		((Graphics2D)ig).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		//绘制点击层
+		ig.setColor(halfTransparent);
+		ig.fillRect(0,0,this.getWidth(),this.getHeight());
 		ig.setColor(lightParentGray);
 		int w=icon.getWidth(),h=icon.getHeight();
 		for(int i=0;i<w;i++){
@@ -55,6 +60,7 @@ public class EntryOnBar extends JButton{
 		}
 	}
 	private final static Color lightParentGray=new Color(20,20,20,100);
+	private final static Color halfTransparent=new Color(0,0,0,1);
 	private BufferedImage bgImage=new BufferedImage(PluginBar.ENTRY_WIDTH_HEIGHT
 			,PluginBar.ENTRY_WIDTH_HEIGHT,BufferedImage.TYPE_INT_ARGB);
 	/**
@@ -64,6 +70,8 @@ public class EntryOnBar extends JButton{
 	 */
 	@Override
 	public void paint(Graphics g){
+//		g.setColor(transparent);
+//		g.fillRect(0,0,this.getWidth(),this.getHeight());
 
 		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		//绘制底层

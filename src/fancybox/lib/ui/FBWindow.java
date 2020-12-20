@@ -221,6 +221,7 @@ public class FBWindow extends JWindow {
 	}
 	public void hideFBW(){
 		super.setVisible(false);
+		//TODO 检查是否有在此window之后的window需要上移
 	}
 
 	/**

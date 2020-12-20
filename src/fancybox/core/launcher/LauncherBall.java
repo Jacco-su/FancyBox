@@ -38,10 +38,6 @@ public class LauncherBall extends JWindow {
 		}
 	}
 	static Point ballPosition=new Point(),mousePositionOnScreen=new Point();
-	//change ball icon on click
-	private final static Animation ballAnimationOnClick=new Animation(()->{
-
-	});
 	/**
 	 * handle mouse event
 	 * @author Rock Chin
@@ -53,11 +49,10 @@ public class LauncherBall extends JWindow {
 		public void mouseClicked(MouseEvent e) {
 			if(LauncherMain.pluginBar.isVisible()){
 				LauncherMain.pluginBar.setVisible(false);
+				LauncherMain.launcherBall.repaint();
 			}else {
-				//perform ball animation
-				ballAnimationOnClick.perform();
-
 				LauncherMain.pluginBar.showBar();
+				LauncherMain.launcherBall.repaint();
 			}
 		}
 
@@ -87,6 +82,7 @@ public class LauncherBall extends JWindow {
 	final static Color lightLightGray=new Color(255,255,255,240);
 	final static Color lightLightLightGray=new Color(255,255,255,140);
 	final static BasicStroke iconStroke=new BasicStroke(3);
+	final static BasicStroke iconStrokeLight=new BasicStroke(1);
 	public Graphics graphics;
 	final static int iconw=20,iconh=10,ix=0,iy=2;
 	static BufferedImage ball_bg=new BufferedImage(80,80,BufferedImage.TYPE_INT_ARGB);
@@ -94,7 +90,7 @@ public class LauncherBall extends JWindow {
 	static Color[] blackTransparent=new Color[80];
 	static {
 		for(int i=0;i<80;i++){
-			blackTransparent[i]=new Color(0,0,0,(i));
+			blackTransparent[i]=new Color(80,80,80,(i));
 		}
 	}
 	static {
@@ -114,26 +110,43 @@ public class LauncherBall extends JWindow {
 	private static int distance(int x0,int y0,int x1,int y1){
 		return (int)Math.sqrt( Math.pow(x0-x1,2)+Math.pow(y0-y1,2) );
 	}
+	private final static int bx=26,by=29;
+	final static Color transparent=new Color(0,0,0,0);
+	boolean inited=false;
 	public void paint(Graphics g){
 		graphics=g;
+//		g.setColor(transparent);
+//		g.fillRect(0,0,this.getWidth(),this.getHeight());
+//		g.clearRect(0,0,this.getWidth(),this.getHeight());
 //		//绘制阴影
 //		g.setColor(new Color(0,0,0,35));
 //		g.fillOval(0,0,this.getWidth(),this.getHeight());
 //		//绘制羽化背景
-		g.drawImage(ball_bg,0,0,this);
+		if (!inited) {
+			g.drawImage(ball_bg, 0, 0, this);
+			inited=true;
+		}
 		//绘制一个白底圆形
 		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setColor(lightLightGray);
 		g.fillOval(8,8,this.getWidth()-15,this.getHeight()-15);
 		//绘制图标
 		g.setColor(Color.darkGray);
 		((Graphics2D)g).setStroke(iconStroke);
-		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2-6+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2-6+iy);
-		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+iy);
-		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+6+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+6+iy);
-		g.drawLine(this.getWidth()/2-iconw/2+ix,this.getHeight()/2-iconh/2+12+iy,this.getWidth()/2-iconw/2+iconw+2+ix,this.getHeight()/2-iconh/2+12+iy);
-
+		if(!LauncherMain.pluginBar.isVisible()){
+			g.drawRoundRect(bx, by, 30, 7, 5, 5);
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.drawRect(bx + 3, by + 7, 24, 20);
+			g.drawLine(bx + 9, by + 7 + 5, bx + 7 + 14, by + 7 + 5);
+		}else{
+			g.drawRoundRect(bx, by-4, 30, 7, 5, 5);
+			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.drawRect(bx + 3, by + 9, 24, 20);
+			g.drawLine(bx + 9, by + 7 + 7, bx + 7 + 14, by + 7 + 7);
+			g.setColor(Color.white);
+			g.fillRect(bx + 5, by + 6,21,6);
+			g.fillRect(bx + 2, by + 6,27,4);
+		}
 	}
 	public LauncherBall(int w,int h){
 		this.setAlwaysOnTop(true);
@@ -142,6 +155,8 @@ public class LauncherBall extends JWindow {
 		this.setLocation(1700,400);
 		this.setBackground(new Color(0,0,0,0));
 //		this.getContentPane().setBackground(new Color(0,0,0,0));
+//		System.out.println(getMouseListeners().length);
+//		this.removeMouseListener(getMouseListeners()[0]);
 		this.addMouseMotionListener(new DragBall());
 		this.addMouseListener(new MouseBall());
 		this.setVisible(true);
