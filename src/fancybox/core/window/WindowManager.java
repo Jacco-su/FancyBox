@@ -2,7 +2,6 @@ package fancybox.core.window;
 
 import fancybox.lib.ui.FBWindow;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 /**

@@ -1,16 +1,11 @@
 package fancybox.core.launcher;
 
-import fancybox.lib.animation.Animation;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Launcher ball
@@ -115,12 +110,6 @@ public class LauncherBall extends JWindow {
 	boolean inited=false;
 	public void paint(Graphics g){
 		graphics=g;
-//		g.setColor(transparent);
-//		g.fillRect(0,0,this.getWidth(),this.getHeight());
-//		g.clearRect(0,0,this.getWidth(),this.getHeight());
-//		//绘制阴影
-//		g.setColor(new Color(0,0,0,35));
-//		g.fillOval(0,0,this.getWidth(),this.getHeight());
 //		//绘制羽化背景
 		if (!inited) {
 			g.drawImage(ball_bg, 0, 0, this);
@@ -134,29 +123,25 @@ public class LauncherBall extends JWindow {
 		g.setColor(Color.darkGray);
 		((Graphics2D)g).setStroke(iconStroke);
 		if(!LauncherMain.pluginBar.isVisible()){
-			g.drawRoundRect(bx, by, 30, 7, 5, 5);
 			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.drawRoundRect(bx-1, by, 31, 7, 5, 5);
 			g.drawRect(bx + 3, by + 7, 24, 20);
-			g.drawLine(bx + 9, by + 7 + 5, bx + 7 + 14, by + 7 + 5);
+			g.drawLine(bx + 9, by + 7 + 5, bx + 7 + 13, by + 7 + 5);
 		}else{
-			g.drawRoundRect(bx, by-4, 30, 7, 5, 5);
 			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
+			g.drawRoundRect(bx-1, by-4, 31, 7, 5, 5);
 			g.drawRect(bx + 3, by + 9, 24, 20);
-			g.drawLine(bx + 9, by + 7 + 7, bx + 7 + 14, by + 7 + 7);
+			g.drawLine(bx + 9, by + 7 + 7, bx + 7 + 13, by + 7 + 7);
 			g.setColor(Color.white);
-			g.fillRect(bx + 5, by + 6,21,6);
-			g.fillRect(bx + 2, by + 6,27,4);
+			g.fillRect(bx + 5, by + 6,20,6);
+			g.fillRect(bx + 1, by + 6,28,4);
 		}
 	}
 	public LauncherBall(int w,int h){
 		this.setAlwaysOnTop(true);
 		this.setSize(w+10,h+10);
-//		this.setOpacity(1);
 		this.setLocation(1700,400);
 		this.setBackground(new Color(0,0,0,0));
-//		this.getContentPane().setBackground(new Color(0,0,0,0));
-//		System.out.println(getMouseListeners().length);
-//		this.removeMouseListener(getMouseListeners()[0]);
 		this.addMouseMotionListener(new DragBall());
 		this.addMouseListener(new MouseBall());
 		this.setVisible(true);

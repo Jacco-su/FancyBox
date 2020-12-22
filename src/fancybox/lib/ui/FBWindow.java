@@ -172,7 +172,7 @@ public class FBWindow extends JWindow {
 	}
 	@Override
 	public void setSize(int w,int h){
-		if (!fbwVisible) {
+		if (!isVisible()) {
 			panel.setSize(w, h);
 			shadeBg.setSize(w+50+5,h+5);
 			toolBar.setSize(w+50+5,h+5);
@@ -197,11 +197,11 @@ public class FBWindow extends JWindow {
 		this.panel.setBackground(bg);
 //		super.setBackground(bg);
 	}
-	private boolean fbwVisible=false;
+//	private boolean fbwVisible=false;
 
-	public boolean isFBWVisible(){
-		return fbwVisible;
-	}
+//	public boolean isFBWVisible(){
+//		return fbwVisible;
+//	}
 
 	@Override
 	public void setVisible(boolean b){
@@ -210,7 +210,7 @@ public class FBWindow extends JWindow {
 		}else {
 			hideFBW();
 		}
-		fbwVisible=b;
+//		fbwVisible=b;
 //		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
 	}
 	public void showFBW(){
@@ -218,10 +218,15 @@ public class FBWindow extends JWindow {
 //		System.out.println("updated");
 		super.add(panel);
 		show();
+		this.thumb=getThumb();
 	}
 	public void hideFBW(){
 		super.setVisible(false);
-		//TODO 检查是否有在此window之后的window需要上移
+		for(FBWindow window:LauncherMain.windowManager.windows){
+			if(window.isVisible()&&window.getY()>this.getY()){
+				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
+			}
+		}
 	}
 
 	/**
@@ -238,11 +243,11 @@ public class FBWindow extends JWindow {
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 //		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int) screenSize.getHeight();
-		if (!fbwVisible) {
+		if (!isVisible()) {
 			//计算已使用的总高度
 			int usedHeight = 0;
 			for (FBWindow window1 : LauncherMain.windowManager.windows) {
-				if (window1.fbwVisible)
+				if (window1.isVisible())
 					usedHeight += window1.getHeight() + WindowManager.WINDOW_DISTANCE;
 			}
 			//检查是否有空间
@@ -254,7 +259,7 @@ public class FBWindow extends JWindow {
 			} else {
 				//移动之下的窗口
 				for (FBWindow window : LauncherMain.windowManager.windows) {
-					if (window.fbwVisible) {
+					if (window.isVisible()) {
 //						System.out.println(window.getWidth());
 						window.shiftY( this.getHeight() + WindowManager.WINDOW_DISTANCE);
 						//验证此窗口是否超出范围
@@ -270,6 +275,12 @@ public class FBWindow extends JWindow {
 	}
 	public void shiftY(int height){
 		super.setLocation(this.getX(),this.getY()+height);
+	}
+	public BufferedImage thumb;
+	public BufferedImage getThumb(){
+		BufferedImage thumb=new BufferedImage(this.getWidth(),this.getHeight(),BufferedImage.TYPE_INT_ARGB);
+		this.paint(thumb.createGraphics());
+		return thumb;
 	}
 	/**
 	 * 覆盖以禁用父类的设置位置方法
