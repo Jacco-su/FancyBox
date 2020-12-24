@@ -34,17 +34,6 @@ public class FBWindow extends JWindow {
 		public void repaintShade(){
 			shade=new BufferedImage(this.getWidth(),this.getHeight(),BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g=shade.createGraphics();
-//			//右边竖着的
-//			for (int i=0;i<10;i++){
-//				g.setColor(blackTransparent[9-i]);
-//				g.drawLine(this.getWidth()-10+i,10,this.getWidth()-10+i,this.getHeight()-10);
-//			}
-//			//下面横着的
-//			for (int i=0;i<10;i++){
-//				g.setColor(blackTransparent[9-i]);
-//				g.drawLine(0,this.getHeight()-10+i,this.getWidth(),this.getHeight()-10+i);
-//			}
-//			g.setColor(halfTransparent);
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			for(int i=0;i<10;i++){
@@ -61,11 +50,6 @@ public class FBWindow extends JWindow {
 
 		}
 		public void paint(Graphics g){
-//			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
-//			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-//			g.setColor(bgGray);
-//			g.fillRoundRect(-20,5,this.getWidth()-7+25,this.getHeight()-7,20,20);
-//			System.out.println((this.getWidth()-10)+" "+(this.getHeight()-10));
 			g.drawImage(shade,0,0,this);
 		}
 	}
@@ -75,19 +59,11 @@ public class FBWindow extends JWindow {
 	 */
 	private static class ToolBar extends JPanel{
 		public void paint(Graphics g){
-//			System.out.println("toolBar:"+getLocation());
-
-
 			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			//绘制圆角矩形底
 			g.setColor(getForeground());
 			g.fillRoundRect(-20,0,this.getWidth()+15,this.getHeight()-5,20,20);
-//			((Graphics2D)g).setStroke(borderStroke);
-//			g.setColor(darker(getForeground()));
-//			g.fillRoundRect(-20,2,this.getWidth()+13,this.getHeight()-7,20,20);
-//			int x=this.getWidth()-30;
-//			g.drawLine(x,0,x,this.getHeight());
 		}
 		public Color darker(Color c){
 			int r=c.getRed(),g=c.getGreen(),b=c.getBlue();
@@ -101,6 +77,48 @@ public class FBWindow extends JWindow {
 	private JPanel panel=new JPanel();
 	private ShadeBg shadeBg=new ShadeBg();
 	private ToolBar toolBar= new ToolBar();
+
+	//window operation buttons
+	JPanel operBtnPanel;
+
+	/**
+	 * defines a oper btn
+	 */
+	public class WindowOperBtn extends JButton{
+		BufferedImage image;
+		public WindowOperBtn(BufferedImage image,int w,int h){
+			this.setBackground(toolBar.getForeground());
+			this.setSize(w,h);
+			ImageConvert convert=new ImageConvert(image);
+			this.image=convert.changeResolutionRate((double) this.getWidth()/(double) image.getWidth()).getProduct();
+		}
+		@Override
+		public void paint(Graphics g){
+			g.setColor(getBackground());
+			g.fillRect(0,0,this.getWidth(),this.getHeight());
+			g.drawImage(image,0,0,this);
+//			System.out.println("paintOper"+getBackground());
+		}
+	}
+	public void setOperButtons(){
+		logob=new WindowOperBtn(plugin.icon,30,30);
+		logob.setLocation(operBtnPanel.getWidth()-46,10);
+	}
+
+	WindowOperBtn logob;
+	public void initOperPanel(){
+		operBtnPanel=new JPanel();
+		operBtnPanel.setBackground(transparent);
+		operBtnPanel.setLayout(null);
+		operBtnPanel.setLocation(0,0);
+		operBtnPanel.setSize(this.getWidth(),this.getHeight());
+
+		setOperButtons();
+		operBtnPanel.add(logob);
+
+		super.add(operBtnPanel);
+	}
+
 
 
 	public final static Color psc[]=new Color[] {new Color(0,0,0),new Color(127,127,127)
@@ -146,23 +164,17 @@ public class FBWindow extends JWindow {
 		shadeBg.setLocation(0,0);
 		super.add(shadeBg);
 
+//		initOperPanel();
+
 		this.setOpacity(0.98f);
-//		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
 	}
 //
 	@Override
 	public void paint(Graphics g){
-		//绘制panel的控件
-//		super.paint(g);
-//		shadeBg.paint(g);
-//		toolBar.paint(g);
-//		panel.paint(g);
-
-//		shadeBg.repaint(3);
-//		toolBar.repaint(20);
-//		panel.repaint(40);
 		shadeBg.update(g);
 		toolBar.update(g);
+		operBtnPanel.update(g);
+//		System.out.println(operBtnPanel.getBounds()+" "+operBtnPanel.getComponents().length+" "+operBtnPanel.getComponents()[0].getBounds());
 		panel.update(g);
 	}
 	@Override
@@ -176,6 +188,7 @@ public class FBWindow extends JWindow {
 			panel.setSize(w, h);
 			shadeBg.setSize(w+50+5,h+5);
 			toolBar.setSize(w+50+5,h+5);
+//			operBtnPanel.setSize(w+55,h+5);
 			super.setSize(w + 50+5, h+5);
 		}
 	}
@@ -187,6 +200,11 @@ public class FBWindow extends JWindow {
 	public void setForeground(Color fg){
 		toolBar.setForeground(fg);
 		super.setForeground(fg);
+		if(operBtnPanel!=null){
+			for(Component component:operBtnPanel.getComponents()){
+				component.setBackground(fg);
+			}
+		}
 	}
 	/**
 	 *
@@ -195,13 +213,7 @@ public class FBWindow extends JWindow {
 	@Override
 	public void setBackground(Color bg){
 		this.panel.setBackground(bg);
-//		super.setBackground(bg);
 	}
-//	private boolean fbwVisible=false;
-
-//	public boolean isFBWVisible(){
-//		return fbwVisible;
-//	}
 
 	@Override
 	public void setVisible(boolean b){
@@ -210,11 +222,12 @@ public class FBWindow extends JWindow {
 		}else {
 			hideFBW();
 		}
-//		fbwVisible=b;
-//		System.out.println("panel:"+panel.getBounds()+"\nwindow:"+this.getBounds());
 	}
 	public void showFBW(){
 		this.updateLocation();
+//		System.out.println(operBtnPanel.getBounds());
+//		this.setOperButtons();
+		this.initOperPanel();
 //		System.out.println("updated");
 		super.add(panel);
 		show();
@@ -241,7 +254,6 @@ public class FBWindow extends JWindow {
 	public void updateLocation(){
 		//取得屏幕高度
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-//		int screenWidth = (int)screenSize.getWidth();
 		int screenHeight = (int) screenSize.getHeight();
 		if (!isVisible()) {
 			//计算已使用的总高度
@@ -253,19 +265,16 @@ public class FBWindow extends JWindow {
 			//检查是否有空间
 			if ((screenHeight - usedHeight - WindowManager.TOP_DISTANCE - WindowManager.BOTTOM_DISTANCE)
 					> this.getHeight()) {
-//				System.out.println("show");
 				super.setLocation(LauncherMain.launcherBall.getX() - this.getWidth()
 						, WindowManager.TOP_DISTANCE + usedHeight);
 			} else {
 				//移动之下的窗口
 				for (FBWindow window : LauncherMain.windowManager.windows) {
 					if (window.isVisible()) {
-//						System.out.println(window.getWidth());
 						window.shiftY( this.getHeight() + WindowManager.WINDOW_DISTANCE);
 						//验证此窗口是否超出范围
 						if (window.getY()+window.getHeight()+WindowManager.WINDOW_DISTANCE>screenHeight-WindowManager.BOTTOM_DISTANCE){
 							window.setVisible(false);
-//							System.out.println(screenHeight+" "+(this.getY()+this.getHeight()+WindowManager.WINDOW_DISTANCE+WindowManager.BOTTOM_DISTANCE));
 						}
 					}
 				}
