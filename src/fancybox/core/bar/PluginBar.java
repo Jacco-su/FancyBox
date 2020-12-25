@@ -45,7 +45,7 @@ public class PluginBar extends JWindow {
 	public void registerEntry(EntryOnBar entryOnBar){
 		entriesOnBar.add(entryOnBar);
 		//set size and location
-		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT,(PluginBar.ENTRY_WIDTH_HEIGHT+15)*entriesOnBar.size());
+		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT+7,(PluginBar.ENTRY_WIDTH_HEIGHT+15)*entriesOnBar.size());
 		entryOnBar.setLocation(0,(PluginBar.ENTRY_WIDTH_HEIGHT+15)*(entriesOnBar.size()-1));
 		this.add(entryOnBar);
 	}

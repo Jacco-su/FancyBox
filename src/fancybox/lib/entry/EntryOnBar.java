@@ -1,7 +1,9 @@
 package fancybox.lib.entry;
 
 import fancybox.core.bar.PluginBar;
+import fancybox.core.launcher.LauncherMain;
 import fancybox.lib.image.ImageConvert;
+import fancybox.lib.ui.FBWindow;
 import fancybox.plugin.FBPlugin;
 
 import javax.swing.*;
@@ -34,7 +36,7 @@ public class EntryOnBar extends JButton{
 	final static Color transparent=new Color(0,0,0,0);
 	private void init(){
 		this.setBackground(transparent);
-		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT,PluginBar.ENTRY_WIDTH_HEIGHT);
+		this.setSize(PluginBar.ENTRY_WIDTH_HEIGHT+7,PluginBar.ENTRY_WIDTH_HEIGHT);
 			//调整图像大小为40*40
 		if(icon.getWidth()>PluginBar.ENTRY_WIDTH_HEIGHT||icon.getHeight()>PluginBar.ENTRY_WIDTH_HEIGHT) {
 				ImageConvert imageConvert = new ImageConvert(icon);
@@ -63,6 +65,8 @@ public class EntryOnBar extends JButton{
 	private final static Color halfTransparent=new Color(0,0,0,1);
 	private BufferedImage bgImage=new BufferedImage(PluginBar.ENTRY_WIDTH_HEIGHT
 			,PluginBar.ENTRY_WIDTH_HEIGHT,BufferedImage.TYPE_INT_ARGB);
+	static final Color windowLabel=new Color(0, 167, 255),showingWindow=new Color(168, 255, 82);
+	static final BasicStroke winLabelStroke=new BasicStroke(5);
 	/**
 	 * override paint method to render a entry
 	 * transparent bg and icon in center
@@ -70,13 +74,28 @@ public class EntryOnBar extends JButton{
 	 */
 	@Override
 	public void paint(Graphics g){
-//		g.setColor(transparent);
+//		g.setColor(Color.white);
 //		g.fillRect(0,0,this.getWidth(),this.getHeight());
-
 		((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
 		//绘制底层
 		g.drawImage(bgImage,2,2,this);
 		//绘制图标
 		g.drawImage(icon,0,0,this);
+		//绘制插件窗口标记
+		int defined=0,showing=0;
+		for (FBWindow window:LauncherMain.windowManager.windows){
+			if(window.plugin==plugin){
+				defined++;
+				if (window.isVisible()){
+					showing++;
+				}
+			}
+		}
+		if(defined>0){
+//			System.out.println(defined);
+			g.setColor(showing==0?windowLabel:showingWindow);
+			((Graphics2D)g).setStroke(winLabelStroke);
+			g.drawLine(this.getWidth()-5,0,this.getWidth()-5,this.getHeight());
+		}
 	}
 }

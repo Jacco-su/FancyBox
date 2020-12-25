@@ -11,14 +11,15 @@ public class EntryListener implements MouseListener {
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		ArrayList<FBWindow> pluginWindows=new ArrayList<>();
+		EntryOnBar source=((EntryOnBar)e.getSource());
 		//查找由此plugin创建的window
 		for(FBWindow window: LauncherMain.windowManager.windows){
-			if(window.isVisible()){
+			if (window.plugin==source.plugin) {
 				pluginWindows.add(window);
 			}
 		}
 		if(pluginWindows.size()==0){
-			((EntryOnBar)e.getSource()).plugin.main();
+			source.plugin.main();
 		}else if (pluginWindows.size()==1){//如果只有一个窗口则切换此窗口的可见性
 			pluginWindows.get(0).setVisible(!pluginWindows.get(0).isVisible());
 		}

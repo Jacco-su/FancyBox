@@ -253,6 +253,7 @@ public class FBWindow extends JWindow {
 		}else {
 			hideFBW();
 		}
+		LauncherMain.pluginBar.repaint();
 	}
 	public void showFBW(){
 		this.updateLocation();
@@ -349,6 +350,7 @@ public class FBWindow extends JWindow {
 	@Override
 	public void dispose(){
 		LauncherMain.windowManager.windows.remove(this);
+		LauncherMain.pluginBar.repaint();
 		super.dispose();
 	}
 }
