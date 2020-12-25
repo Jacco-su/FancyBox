@@ -22,6 +22,9 @@ public class EntryListener implements MouseListener {
 			source.plugin.main();
 		}else if (pluginWindows.size()==1){//如果只有一个窗口则切换此窗口的可见性
 			pluginWindows.get(0).setVisible(!pluginWindows.get(0).isVisible());
+			//TODO 显示新建按钮
+		}else {//有多个窗口则打开窗口列表供选择
+
 		}
 	}
 
