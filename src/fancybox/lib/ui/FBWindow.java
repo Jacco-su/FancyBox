@@ -8,6 +8,8 @@ import fancybox.plugin.FBPlugin;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 
 /**
@@ -80,7 +82,25 @@ public class FBWindow extends JWindow {
 
 	//window operation buttons
 	JPanel operBtnPanel;
+	static BufferedImage hidebi=new BufferedImage(20,20,BufferedImage.TYPE_INT_ARGB);
+	static BufferedImage closebi=new BufferedImage(20,20,BufferedImage.TYPE_INT_ARGB);
+	static BasicStroke operBtnStroke=new BasicStroke(2);
+	static {
+		Graphics2D g=hidebi.createGraphics();
+		g.setColor(Color.WHITE);
+		g.setStroke(operBtnStroke);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g.drawLine(0,hidebi.getHeight()/2-4,hidebi.getWidth(),hidebi.getHeight()/2-4);
+		g.drawLine(0,hidebi.getHeight()/2-3,hidebi.getWidth(),hidebi.getHeight()/2-3);
 
+		g=closebi.createGraphics();
+		g.setStroke(operBtnStroke);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g.drawLine(2,2,closebi.getWidth()-4,closebi.getHeight()-4);
+		g.drawLine(closebi.getWidth()-4,2,2,closebi.getHeight()-4);
+	}
 	/**
 	 * defines a oper btn
 	 */
@@ -103,9 +123,16 @@ public class FBWindow extends JWindow {
 	public void setOperButtons(){
 		logob=new WindowOperBtn(plugin.icon,30,30);
 		logob.setLocation(operBtnPanel.getWidth()-46,10);
+
+		hide=new WindowOperBtn(hidebi,20,20);
+		hide.setLocation(logob.getX()+5,operBtnPanel.getHeight()-65);
+		close=new WindowOperBtn(closebi,20,20);
+		close.setLocation(logob.getX()+5,hide.getY()+hide.getHeight()+10);
 	}
 
 	WindowOperBtn logob;
+	WindowOperBtn hide;
+	WindowOperBtn close;
 	public void initOperPanel(){
 		operBtnPanel=new JPanel();
 		operBtnPanel.setBackground(transparent);
@@ -115,6 +142,10 @@ public class FBWindow extends JWindow {
 
 		setOperButtons();
 		operBtnPanel.add(logob);
+		operBtnPanel.add(close);
+		close.addActionListener(e -> plugin.stop());
+		operBtnPanel.add(hide);
+		hide.addActionListener(e -> setVisible(false));
 
 		super.add(operBtnPanel);
 	}
@@ -313,5 +344,11 @@ public class FBWindow extends JWindow {
 	 */
 	public void setExitOnClose(boolean b){
 		this.exitOnClose=b;
+	}
+
+	@Override
+	public void dispose(){
+		LauncherMain.windowManager.windows.remove(this);
+		super.dispose();
 	}
 }

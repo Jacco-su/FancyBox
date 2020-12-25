@@ -9,7 +9,7 @@ import fancybox.plugin.FBPlugin;
  * @create 2020/12/16
  */
 public class PluginLoader{
-	private FBPlugin setting=new FancyBoxSetting();
+	private static final FBPlugin setting=new FancyBoxSetting();
 	public void loadInternalPlugin(){
 		setting.init();
 	}

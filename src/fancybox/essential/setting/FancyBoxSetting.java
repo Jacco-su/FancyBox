@@ -29,22 +29,14 @@ public class FancyBoxSetting extends FBPlugin {
 	private FBWindow settingMain;
 	@Override
 	public void main() {
-//		System.exit(0);
 		settingMain=new FBWindow(this);
 		settingMain.setSize(400,200);
 		settingMain.setVisible(true);
 		settingMain.setExitOnClose(true);
-//		JWindow wn=new JWindow();
-//		wn.setSize(100,200);
-//		wn.setLocation(400,400);
-////		wn.setBackground(Color.BLACK);
-//		wn.setAlwaysOnTop(true);
-//		wn.setVisible(true);
-//		FBWindowTest test=new FBWindowTest();
 	}
 
 	@Override
 	public void stop() {
-
+		settingMain.dispose();
 	}
 }
