@@ -34,6 +34,7 @@ public class FancyBoxSetting extends FBPlugin {
 		settingMain=new FBWindow(this);
 		JLabel label=new JLabel(index+++"");
 		label.setBounds(10,10,200,200);
+		settingMain.setForeground(FBWindow.psc[6]);
 		settingMain.add(label);
 		settingMain.setSize(400,200);
 		settingMain.setVisible(true);

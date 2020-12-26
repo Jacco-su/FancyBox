@@ -164,7 +164,7 @@ public class FBWindow extends JWindow {
 			,new Color(255,242,0),new Color(34,177,76),new Color(0,162,232)
 			,new Color(63,72,204),new Color(136,73,164),new Color(235,235,235)
 			,new Color(255,255,255)};
-
+	public final static Color DEFAULT_WINDOW_COLOR=new Color(66, 171, 255);
 	BufferedImage icon;
 
 	public FBPlugin plugin;
@@ -192,7 +192,7 @@ public class FBWindow extends JWindow {
 		panel.setVisible(true);
 		panel.setBackground(psc[10]);
 		super.setBackground(transparent);
-		this.setForeground(psc[8]);
+		this.setForeground(DEFAULT_WINDOW_COLOR);
 		super.setLayout(null);
 
 		super.add(panel);
@@ -261,6 +261,7 @@ public class FBWindow extends JWindow {
 			try{Thread.sleep(5);}catch (Exception ignore){};
 		}
 		LauncherMain.windowList.repaint();
+		LauncherMain.pluginBar.repaint();
 	});
 	public final Animation hidingAnim=new Animation(()->{
 		for(int i=10;i>=0;i--){
@@ -269,15 +270,17 @@ public class FBWindow extends JWindow {
 		}
 		super.setVisible(false);
 		LauncherMain.windowList.repaint();
+		LauncherMain.pluginBar.repaint();
 	});
 	int shiftStart=0,shiftEnd=0;
 	public final Animation shiftYAnim=new Animation(()->{
 		int deltax=shiftEnd-shiftStart;
 		int step=deltax/Math.abs(deltax);
-		for (int i=shiftStart;Math.abs(shiftEnd-i)>6;i+=step*8){
-			super.setLocation(getX(),getY()+step*8);
+		for (int i=shiftStart;Math.abs(shiftEnd-i)>5;i+=step*6){
+			super.setLocation(getX(),getY()+step*6);
 			try{Thread.sleep(1);}catch (Exception ignore){};
 		}
+		super.setLocation(getX(),shiftEnd);
 	});
 	@Override
 	public void setVisible(boolean b){
@@ -286,10 +289,10 @@ public class FBWindow extends JWindow {
 		}else {
 			hideFBW();
 		}
-		LauncherMain.pluginBar.repaint();
 	}
-	public void setVisibleTrue(){
-		setVisible(true);
+	public void performShowAnim(){
+		super.setLocation(LauncherMain.launcherBall.getX() - this.getWidth(),getY());
+		showingAnim.perform();
 	}
 	public void showFBW(){
 		this.updateLocation();
@@ -305,11 +308,16 @@ public class FBWindow extends JWindow {
 	public void hideFBW(){
 //		System.out.println("hide");
 		this.hidingAnim.perform();
-		for(FBWindow window:LauncherMain.windowManager.windows){
-			if(window.isVisible()&&window.getY()>this.getY()){
-				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
+		new Thread(()->{
+			try {
+				Thread.sleep(130);
+			}catch (Exception ignored){}
+			for(FBWindow window:LauncherMain.windowManager.windows){
+				if(window.isVisible()&&window.getY()>this.getY()){
+					window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
+				}
 			}
-		}
+		}).start();
 	}
 
 	/**
@@ -388,11 +396,8 @@ public class FBWindow extends JWindow {
 		this.exitOnClose=b;
 	}
 	Animation disposeAnim=new Animation(()->{
-
-	});
-	@Override
-	public void dispose(){
 		hideFBW();
+		try{Thread.sleep(200);}catch (Exception ignored){}
 		LauncherMain.windowManager.windows.remove(this);
 		LauncherMain.pluginBar.repaint();
 		super.dispose();
@@ -402,11 +407,12 @@ public class FBWindow extends JWindow {
 		if (this.exitOnClose){
 			plugin.stop();
 		}
+		LauncherMain.pluginBar.repaint();
+	});
+	@Override
+	public void dispose(){
+		disposeAnim.perform();
 	}
-	/*public void setLayout(LayoutManager manager){
-		if(panel!=null)
-			panel.setLayout(manager);
-	}*/
 	public JPanel getPanel(){
 		return panel;
 	}

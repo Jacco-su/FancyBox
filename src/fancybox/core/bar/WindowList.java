@@ -137,7 +137,6 @@ public class WindowList extends JWindow {
 		this.add(add);
 	}
 	private static final int WINDOW_ENTRY_HEIGHT=30,WINDOW_ENTRY_DISTANCE=15;
-	private ArrayList<Component> lsComps=new ArrayList<>();
 	static BufferedImage addbtn=new BufferedImage(WINDOW_ENTRY_HEIGHT+25,WINDOW_ENTRY_HEIGHT+6,BufferedImage.TYPE_INT_ARGB);
 	private static final BasicStroke addStroke=new BasicStroke(4);
 	static {
@@ -157,21 +156,18 @@ public class WindowList extends JWindow {
 	public void reload(){
 		showWindowEntries(plugin,entryOnBar,false);
 	}
+	private ArrayList<Component> lsComps=new ArrayList<>();
+	private ArrayList<Component> currentComps=new ArrayList<>();
 	/**
 	 * show this Window to display WindowEntries for specific plugin
 	 * @param plugin specific plugin
 	 */
 	public void showWindowEntries(FBPlugin plugin,EntryOnBar pluginEntry,boolean showAnim){
 //		System.out.print(lsComps.size()+","+this.getContentPane().getComponents().length);
-		this.setVisible(false);
-		for (Component comp:lsComps) {
-			this.remove(comp);
-		}
-		lsComps.clear();
 		this.plugin=plugin;
 		this.entryOnBar=pluginEntry;
 
-		int index=0,maxX=addbtn.getWidth();
+		int index=0,maxX=addbtn.getWidth()+10;
 		for(FBWindow win: LauncherMain.windowManager.windows){
 			if(win.plugin==plugin){
 				WindowEntry entry=new WindowEntry(new ImageConvert(win.thumb)
@@ -179,13 +175,21 @@ public class WindowList extends JWindow {
 						.getProduct(),win);
 				entry.setLocation(0,(index+1)*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE)+10);
 				this.add(entry);
-				lsComps.add(entry);
+				currentComps.add(entry);
 				maxX=Math.max(maxX,entry.getWidth());
 				index++;
 			}
 		}
+		for (Component comp:lsComps) {
+			this.remove(comp);
+		}
+		lsComps.clear();
+		lsComps.addAll(currentComps);
+		currentComps.clear();
+
 		this.setSize(maxX,(index+1)*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE)+10);
-		add.setLocation(this.getWidth()/2-add.getWidth()/2,0);
+//		add.setLocation(this.getWidth()/2-add.getWidth()/2,0);
+		add.setLocation(3,0);
 //		System.out.println(this.getBounds()+" \n   "+add.getBounds());
 //		this.setVisible(true);
 		if(showAnim) {

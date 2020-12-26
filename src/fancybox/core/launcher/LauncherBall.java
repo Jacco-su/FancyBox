@@ -59,7 +59,7 @@ public class LauncherBall extends JWindow {
 				}
 			}else {
 				LauncherMain.pluginBar.showBar();
-				showingWindows.forEach(FBWindow::setVisibleTrue);
+				showingWindows.forEach(FBWindow::performShowAnim);
 				if(windowListShowing)
 					LauncherMain.windowList.showingAnim.perform();
 			}
