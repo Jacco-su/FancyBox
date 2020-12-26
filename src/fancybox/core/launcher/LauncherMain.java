@@ -1,6 +1,7 @@
 package fancybox.core.launcher;
 
 import fancybox.core.bar.PluginBar;
+import fancybox.core.bar.WindowList;
 import fancybox.core.loader.PluginLoader;
 import fancybox.core.window.WindowManager;
 import fancybox.lib.entry.EntryOnBar;
@@ -22,6 +23,7 @@ public class LauncherMain {
 	public static PluginBar pluginBar;
 	public static PluginLoader pluginLoader;
 	public static WindowManager windowManager;
+	public static WindowList windowList;
 	public static void main(String[] args) throws Exception{
 		Out.stdPrintln("CountMain","launching.");
 		pluginBar=new PluginBar();
@@ -29,5 +31,6 @@ public class LauncherMain {
 		pluginLoader=new PluginLoader();
 		pluginLoader.loadInternalPlugin();
 		windowManager=new WindowManager();
+		windowList=new WindowList();
 	}
 }
