@@ -143,7 +143,7 @@ public class FBWindow extends JWindow {
 		setOperButtons();
 		operBtnPanel.add(logob);
 		operBtnPanel.add(close);
-		close.addActionListener(e -> plugin.stop());
+		close.addActionListener(e -> dispose());
 		operBtnPanel.add(hide);
 		hide.addActionListener(e -> setVisible(false));
 
@@ -349,8 +349,15 @@ public class FBWindow extends JWindow {
 
 	@Override
 	public void dispose(){
+		hideFBW();
 		LauncherMain.windowManager.windows.remove(this);
 		LauncherMain.pluginBar.repaint();
 		super.dispose();
+		if(LauncherMain.windowList.isVisible()){
+			LauncherMain.windowList.reload();
+		}
+		if (this.exitOnClose){
+			plugin.stop();
+		}
 	}
 }

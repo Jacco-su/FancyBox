@@ -37,6 +37,6 @@ public class FancyBoxSetting extends FBPlugin {
 
 	@Override
 	public void stop() {
-		settingMain.dispose();
+
 	}
 }

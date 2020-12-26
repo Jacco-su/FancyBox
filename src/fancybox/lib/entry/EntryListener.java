@@ -25,7 +25,11 @@ public class EntryListener implements MouseListener {
 		}*//*else {//有多个窗口则打开窗口列表供选择
 
 		}*/
-		LauncherMain.windowList.showWindowEntries(source.plugin,source);
+		if (LauncherMain.windowList.plugin==source.plugin&&LauncherMain.windowList.isVisible()){
+			LauncherMain.windowList.setVisible(false);
+		}else {
+			LauncherMain.windowList.showWindowEntries(source.plugin, source);
+		}
 	}
 
 	@Override

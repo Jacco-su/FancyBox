@@ -86,7 +86,7 @@ public class WindowList extends JWindow {
 	}
 	private final static Color transparent=new Color(0,0,0,0);
 	private final static Color halfTransparent=new Color(0,0,0,20);
-	private FBPlugin plugin;
+	public FBPlugin plugin;
 	private EntryOnBar entryOnBar;
 	WindowEntry add;
 	/**
@@ -105,20 +105,26 @@ public class WindowList extends JWindow {
 		});
 		this.add(add);
 	}
-	private static final int WINDOW_ENTRY_HEIGHT=20,WINDOW_ENTRY_DISTANCE=10;
+	private static final int WINDOW_ENTRY_HEIGHT=30,WINDOW_ENTRY_DISTANCE=15;
 	private ArrayList<Component> lsComps=new ArrayList<>();
-	static BufferedImage addbtn=new BufferedImage(WINDOW_ENTRY_HEIGHT+10,WINDOW_ENTRY_HEIGHT+15,BufferedImage.TYPE_INT_ARGB);
+	static BufferedImage addbtn=new BufferedImage(WINDOW_ENTRY_HEIGHT+25,WINDOW_ENTRY_HEIGHT+6,BufferedImage.TYPE_INT_ARGB);
 	private static final BasicStroke addStroke=new BasicStroke(4);
 	static {
 		Graphics2D g=addbtn.createGraphics();
+		g.setStroke(addStroke);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setColor(Color.lightGray);
+		g.drawRoundRect(1,1,addbtn.getWidth()-3, addbtn.getHeight()-3,10,10);
+
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_OFF);
 		g.setColor(halfTransparent);
 		g.fillRect(0,0,addbtn.getWidth(),addbtn.getHeight());
-		g.setStroke(addStroke);
 		g.setColor(Color.WHITE);
-		g.drawLine(0,addbtn.getHeight()/2-4,addbtn.getWidth(),addbtn.getHeight()/2-4);
-		g.drawLine(addbtn.getWidth()/2-2,0,addbtn.getWidth()/2-2,addbtn.getHeight());
-//		g.fillRect(0,0,addbtn.getWidth(),addbtn.getHeight());
+		g.drawLine(15,addbtn.getHeight()/2,addbtn.getWidth()-15,addbtn.getHeight()/2);
+		g.drawLine(addbtn.getWidth()/2,9,addbtn.getWidth()/2,addbtn.getHeight()-9);
+	}
+	public void reload(){
+		showWindowEntries(plugin,entryOnBar);
 	}
 	/**
 	 * show this Window to display WindowEntries for specific plugin
@@ -139,7 +145,7 @@ public class WindowList extends JWindow {
 				WindowEntry entry=new WindowEntry(new ImageConvert(win.thumb)
 						.changeResolutionRate((double)WINDOW_ENTRY_HEIGHT/(double) win.thumb.getHeight())
 						.getProduct(),win);
-				entry.setLocation(0,index*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE));
+				entry.setLocation(0,(index+1)*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE)+10);
 				this.add(entry);
 				lsComps.add(entry);
 				maxX=Math.max(maxX,entry.getWidth());
@@ -147,7 +153,7 @@ public class WindowList extends JWindow {
 			}
 		}
 		this.setSize(maxX,(index+1)*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE)+10);
-		add.setLocation(0,this.getHeight()-add.getHeight()+10);
+		add.setLocation(this.getWidth()/2-add.getWidth()/2,0);
 //		System.out.println(this.getBounds()+" \n   "+add.getBounds());
 		this.setLocation(LauncherMain.launcherBall.getX()+LauncherMain.launcherBall.getWidth()+15,pluginEntry.getY()+LauncherMain.pluginBar.getY());
 		this.setVisible(true);
