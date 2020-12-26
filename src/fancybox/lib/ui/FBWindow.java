@@ -144,9 +144,15 @@ public class FBWindow extends JWindow {
 		setOperButtons();
 		operBtnPanel.add(logob);
 		operBtnPanel.add(close);
-		close.addActionListener(e -> dispose());
+		close.addActionListener(e -> {
+//			System.out.println("close");
+			dispose();
+		});
 		operBtnPanel.add(hide);
-		hide.addActionListener(e -> setVisible(false));
+		hide.addActionListener(e -> {
+//			System.out.println("hide");
+			setVisible(false);
+		});
 
 		super.add(operBtnPanel);
 	}
@@ -187,7 +193,7 @@ public class FBWindow extends JWindow {
 		panel.setBackground(psc[10]);
 		super.setBackground(transparent);
 		this.setForeground(psc[8]);
-		this.setLayout(null);
+		super.setLayout(null);
 
 		super.add(panel);
 		LauncherMain.windowManager.windows.add(this);
@@ -252,20 +258,17 @@ public class FBWindow extends JWindow {
 		super.setVisible(true);
 		for(int i=0;i<=10;i++){
 			this.setOpacity(1f/10f*i);
-			try{Thread.sleep(10);}catch (Exception ignore){};
+			try{Thread.sleep(5);}catch (Exception ignore){};
 		}
+		LauncherMain.windowList.repaint();
 	});
 	public final Animation hidingAnim=new Animation(()->{
 		for(int i=10;i>=0;i--){
 			this.setOpacity(1f/10f*i);
-			try{Thread.sleep(10);}catch (Exception ignore){};
-		}
-		for(FBWindow window:LauncherMain.windowManager.windows){
-			if(window.isVisible()&&window.getY()>this.getY()){
-				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
-			}
+			try{Thread.sleep(5);}catch (Exception ignore){};
 		}
 		super.setVisible(false);
+		LauncherMain.windowList.repaint();
 	});
 	int shiftStart=0,shiftEnd=0;
 	public final Animation shiftYAnim=new Animation(()->{
@@ -300,7 +303,13 @@ public class FBWindow extends JWindow {
 		this.thumb=getThumb();
 	}
 	public void hideFBW(){
+//		System.out.println("hide");
 		this.hidingAnim.perform();
+		for(FBWindow window:LauncherMain.windowManager.windows){
+			if(window.isVisible()&&window.getY()>this.getY()){
+				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
+			}
+		}
 	}
 
 	/**
@@ -378,7 +387,9 @@ public class FBWindow extends JWindow {
 	public void setExitOnClose(boolean b){
 		this.exitOnClose=b;
 	}
+	Animation disposeAnim=new Animation(()->{
 
+	});
 	@Override
 	public void dispose(){
 		hideFBW();
@@ -391,5 +402,12 @@ public class FBWindow extends JWindow {
 		if (this.exitOnClose){
 			plugin.stop();
 		}
+	}
+	/*public void setLayout(LayoutManager manager){
+		if(panel!=null)
+			panel.setLayout(manager);
+	}*/
+	public JPanel getPanel(){
+		return panel;
 	}
 }

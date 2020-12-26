@@ -6,6 +6,7 @@ import fancybox.lib.ui.FBWindow;
 import fancybox.plugin.FBPlugin;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +28,13 @@ public class FancyBoxSetting extends FBPlugin {
 		LauncherMain.pluginBar.registerEntry(entry);
 	}
 	private FBWindow settingMain;
+	static int index=0;
 	@Override
 	public void main() {
 		settingMain=new FBWindow(this);
+		JLabel label=new JLabel(index+++"");
+		label.setBounds(10,10,200,200);
+		settingMain.add(label);
 		settingMain.setSize(400,200);
 		settingMain.setVisible(true);
 		settingMain.setExitOnClose(true);

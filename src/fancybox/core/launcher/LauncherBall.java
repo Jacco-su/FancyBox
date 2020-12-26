@@ -54,7 +54,7 @@ public class LauncherBall extends JWindow {
 				for(FBWindow win:LauncherMain.windowManager.windows){
 					if(win.isVisible()) {
 						showingWindows.add(win);
-						win.setVisible(false);
+						win.hidingAnim.perform();
 					}
 				}
 			}else {

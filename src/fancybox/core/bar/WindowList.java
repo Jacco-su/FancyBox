@@ -37,7 +37,7 @@ public class WindowList extends JWindow {
 			this.window=window;
 			init(img,()->{
 				window.setVisible(!window.isVisible());
-				LauncherMain.windowList.repaint();
+//				LauncherMain.windowList.repaint();
 			});
 		}
 		WindowEntry(BufferedImage img, Runnable action){
@@ -78,6 +78,7 @@ public class WindowList extends JWindow {
 		@Override
 		public void paint(Graphics g){
 			((Graphics2D)g).setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
+//			System.out.println((window==null)+" "+(window==null?"":window.isVisible()));
 			if (window!=null) {
 				g.setColor(window.isVisible() ? EntryOnBar.showingWindow : EntryOnBar.windowLabel);
 				g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(), 10, 10);
@@ -161,12 +162,12 @@ public class WindowList extends JWindow {
 	 * @param plugin specific plugin
 	 */
 	public void showWindowEntries(FBPlugin plugin,EntryOnBar pluginEntry,boolean showAnim){
+//		System.out.print(lsComps.size()+","+this.getContentPane().getComponents().length);
 		this.setVisible(false);
 		for (Component comp:lsComps) {
 			this.remove(comp);
 		}
 		lsComps.clear();
-
 		this.plugin=plugin;
 		this.entryOnBar=pluginEntry;
 
@@ -193,6 +194,8 @@ public class WindowList extends JWindow {
 			calcLocation(pluginEntry);
 			this.setVisible(true);
 		}
+
+//		System.out.println(" "+lsComps.size()+","+this.getContentPane().getComponents().length);
 	}
 	public void hideWindowList(){
 		hidingAnim.perform();
