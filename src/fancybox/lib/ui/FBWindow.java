@@ -255,6 +255,9 @@ public class FBWindow extends JWindow {
 		}
 		LauncherMain.pluginBar.repaint();
 	}
+	public void setVisibleTrue(){
+		setVisible(true);
+	}
 	public void showFBW(){
 		this.updateLocation();
 //		System.out.println(operBtnPanel.getBounds());

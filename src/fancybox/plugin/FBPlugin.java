@@ -12,6 +12,15 @@ public abstract class FBPlugin {
 	public BufferedImage icon;
 	public String name;
 	public String description;
+	public int maxInstanceAmount=-1;
+
+	public int getMaxInstanceAmount() {
+		return maxInstanceAmount;
+	}
+
+	public void setMaxInstanceAmount(int maxInstanceAmount) {
+		this.maxInstanceAmount = maxInstanceAmount;
+	}
 
 	/**
 	 * use this method to set information of this plugin.

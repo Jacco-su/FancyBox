@@ -1,11 +1,14 @@
 package fancybox.core.launcher;
 
+import fancybox.lib.ui.FBWindow;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Launcher ball
@@ -39,16 +42,27 @@ public class LauncherBall extends JWindow {
 	 * @create 2020/12/14
 	 */
 	private static class MouseBall implements MouseListener{
-
+		static ArrayList<FBWindow> showingWindows=new ArrayList<>();
+		static boolean windowListShowing=false;
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if(LauncherMain.pluginBar.isVisible()){
 				LauncherMain.pluginBar.setVisible(false);
-				LauncherMain.launcherBall.repaint();
+				windowListShowing=LauncherMain.windowList.isVisible();
+				LauncherMain.windowList.setVisible(false);
+				showingWindows.clear();
+				for(FBWindow win:LauncherMain.windowManager.windows){
+					if(win.isVisible()) {
+						showingWindows.add(win);
+						win.setVisible(false);
+					}
+				}
 			}else {
 				LauncherMain.pluginBar.showBar();
-				LauncherMain.launcherBall.repaint();
+				showingWindows.forEach(FBWindow::setVisibleTrue);
+				LauncherMain.windowList.setVisible(windowListShowing);
 			}
+			LauncherMain.launcherBall.repaint();
 		}
 
 		//record mouse info when mouse pressed on ball

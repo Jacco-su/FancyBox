@@ -65,7 +65,7 @@ public class EntryOnBar extends JButton{
 	private final static Color halfTransparent=new Color(0,0,0,1);
 	private BufferedImage bgImage=new BufferedImage(PluginBar.ENTRY_WIDTH_HEIGHT
 			,PluginBar.ENTRY_WIDTH_HEIGHT,BufferedImage.TYPE_INT_ARGB);
-	public static final Color windowLabel=new Color(0, 121, 170),showingWindow=new Color(73, 153, 0);
+	public static final Color windowLabel=new Color(193, 193, 193),showingWindow=new Color(0, 132, 229);
 	static final BasicStroke winLabelStroke=new BasicStroke(5);
 	/**
 	 * override paint method to render a entry
