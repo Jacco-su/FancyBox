@@ -18,21 +18,10 @@ public class PluginBar extends JWindow {
 	public final static int ENTRY_WIDTH_HEIGHT=60;
 	//animation to perform when bar opening
 	public final static Animation barOpening=new Animation(()->{
-//		PluginBar bar=LauncherMain.pluginBar;
-//		bar.setSize(bar.getWidth(),0);
-		//设置所有的entry为不可见
-//		for(EntryOnBar entry:LauncherMain.pluginBar.entriesOnBar){
-//			entry.setVisible(false);
-//		}
-//		//挨个显示
-//		for(EntryOnBar entry:LauncherMain.pluginBar.entriesOnBar){
-//			entry.setOpaque(true);
-//			entry.setVisible(true);
-//		}
 		for (int i=0;i<10;i++){
 			LauncherMain.pluginBar.setOpacity((float) (i*0.1));
 			try{
-				Thread.sleep(13);
+				Thread.sleep(17);
 			}catch (Exception e){}
 		}
 	});

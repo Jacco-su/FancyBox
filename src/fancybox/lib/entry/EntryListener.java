@@ -26,9 +26,9 @@ public class EntryListener implements MouseListener {
 
 		}*/
 		if (LauncherMain.windowList.plugin==source.plugin&&LauncherMain.windowList.isVisible()){
-			LauncherMain.windowList.setVisible(false);
+			LauncherMain.windowList.hideWindowList();
 		}else {
-			LauncherMain.windowList.showWindowEntries(source.plugin, source);
+			LauncherMain.windowList.showWindowEntries(source.plugin, source,true);
 		}
 	}
 

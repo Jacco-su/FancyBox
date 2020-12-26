@@ -3,6 +3,7 @@ package fancybox.lib.ui;
 import fancybox.core.bar.PluginBar;
 import fancybox.core.launcher.LauncherMain;
 import fancybox.core.window.WindowManager;
+import fancybox.lib.animation.Animation;
 import fancybox.lib.image.ImageConvert;
 import fancybox.plugin.FBPlugin;
 
@@ -246,6 +247,35 @@ public class FBWindow extends JWindow {
 		this.panel.setBackground(bg);
 	}
 
+	public final Animation showingAnim=new Animation(()->{
+		this.setOpacity(0);
+		super.setVisible(true);
+		for(int i=0;i<=10;i++){
+			this.setOpacity(1f/10f*i);
+			try{Thread.sleep(10);}catch (Exception ignore){};
+		}
+	});
+	public final Animation hidingAnim=new Animation(()->{
+		for(int i=10;i>=0;i--){
+			this.setOpacity(1f/10f*i);
+			try{Thread.sleep(10);}catch (Exception ignore){};
+		}
+		for(FBWindow window:LauncherMain.windowManager.windows){
+			if(window.isVisible()&&window.getY()>this.getY()){
+				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
+			}
+		}
+		super.setVisible(false);
+	});
+	int shiftStart=0,shiftEnd=0;
+	public final Animation shiftYAnim=new Animation(()->{
+		int deltax=shiftEnd-shiftStart;
+		int step=deltax/Math.abs(deltax);
+		for (int i=shiftStart;Math.abs(shiftEnd-i)>6;i+=step*8){
+			super.setLocation(getX(),getY()+step*8);
+			try{Thread.sleep(1);}catch (Exception ignore){};
+		}
+	});
 	@Override
 	public void setVisible(boolean b){
 		if (b){
@@ -265,16 +295,12 @@ public class FBWindow extends JWindow {
 		this.initOperPanel();
 //		System.out.println("updated");
 		super.add(panel);
-		show();
+//		show();
+		this.showingAnim.perform();
 		this.thumb=getThumb();
 	}
 	public void hideFBW(){
-		super.setVisible(false);
-		for(FBWindow window:LauncherMain.windowManager.windows){
-			if(window.isVisible()&&window.getY()>this.getY()){
-				window.shiftY(-(this.getHeight()+WindowManager.WINDOW_DISTANCE));
-			}
-		}
+		this.hidingAnim.perform();
 	}
 
 	/**
@@ -318,7 +344,10 @@ public class FBWindow extends JWindow {
 		}
 	}
 	public void shiftY(int height){
-		super.setLocation(this.getX(),this.getY()+height);
+//		super.setLocation(this.getX(),this.getY()+height);
+		this.shiftStart=getY();
+		this.shiftEnd=getY()+height;
+		shiftYAnim.perform();
 	}
 	public BufferedImage thumb;
 	public BufferedImage getThumb(){

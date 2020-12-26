@@ -1,6 +1,7 @@
 package fancybox.core.bar;
 
 import fancybox.core.launcher.LauncherMain;
+import fancybox.lib.animation.Animation;
 import fancybox.lib.entry.EntryOnBar;
 import fancybox.lib.image.ImageConvert;
 import fancybox.lib.ui.FBWindow;
@@ -36,7 +37,7 @@ public class WindowList extends JWindow {
 			this.window=window;
 			init(img,()->{
 				window.setVisible(!window.isVisible());
-				this.repaint();
+				LauncherMain.windowList.repaint();
 			});
 		}
 		WindowEntry(BufferedImage img, Runnable action){
@@ -82,13 +83,42 @@ public class WindowList extends JWindow {
 				g.fillRoundRect(0, 0, this.getWidth(), this.getHeight(), 10, 10);
 			}
 			g.drawImage(image,3,3,this);
+			if(window!=null&&!window.isVisible()){
+				g.setColor(halfTransparentPlus);
+				g.fillRoundRect(0,0,this.getWidth(),this.getHeight(),10,10);
+			}
 		}
 	}
 	private final static Color transparent=new Color(0,0,0,0);
 	private final static Color halfTransparent=new Color(0,0,0,20);
+	private final static Color halfTransparentPlus=new Color(0,0,0,120);
 	public FBPlugin plugin;
 	private EntryOnBar entryOnBar;
 	WindowEntry add;
+
+	public final Animation showingAnim=new Animation(()->{
+		calcLocation(entryOnBar);
+		Point endLocation=this.getLocation();
+		this.setOpacity(0f);
+		this.setVisible(true);
+		for(int i=1;i<=30;i++){
+			this.setOpacity((float) (1.0/30.0)*i);
+			this.setLocation( endLocation.x-30+(30/30)*i,endLocation.y );
+			try {
+				Thread.sleep(1);
+			}catch (Exception ignored){}
+		}
+	});
+	public final Animation hidingAnim=new Animation(()->{
+		for(int i=10;i>=0;i--){
+			this.setOpacity((float) ((1.0/10)*i));
+			this.setLocation(getX()-2,getY());
+			try {
+				Thread.sleep(5);
+			}catch (Exception ignored){}
+		}
+		this.setVisible(false);
+	});
 	/**
 	 * create WindowList with width provided
 	 */
@@ -101,7 +131,7 @@ public class WindowList extends JWindow {
 		add=new WindowEntry(addbtn, () -> {
 			plugin.main();
 //			this.setVisible(false);
-			this.showWindowEntries(plugin,entryOnBar);
+			this.reload();
 		});
 		this.add(add);
 	}
@@ -124,13 +154,14 @@ public class WindowList extends JWindow {
 		g.drawLine(addbtn.getWidth()/2,9,addbtn.getWidth()/2,addbtn.getHeight()-9);
 	}
 	public void reload(){
-		showWindowEntries(plugin,entryOnBar);
+		showWindowEntries(plugin,entryOnBar,false);
 	}
 	/**
 	 * show this Window to display WindowEntries for specific plugin
 	 * @param plugin specific plugin
 	 */
-	public void showWindowEntries(FBPlugin plugin,EntryOnBar pluginEntry){
+	public void showWindowEntries(FBPlugin plugin,EntryOnBar pluginEntry,boolean showAnim){
+		this.setVisible(false);
 		for (Component comp:lsComps) {
 			this.remove(comp);
 		}
@@ -155,7 +186,20 @@ public class WindowList extends JWindow {
 		this.setSize(maxX,(index+1)*(WINDOW_ENTRY_HEIGHT+WINDOW_ENTRY_DISTANCE)+10);
 		add.setLocation(this.getWidth()/2-add.getWidth()/2,0);
 //		System.out.println(this.getBounds()+" \n   "+add.getBounds());
-		this.setLocation(LauncherMain.launcherBall.getX()+LauncherMain.launcherBall.getWidth()+15,pluginEntry.getY()+LauncherMain.pluginBar.getY());
-		this.setVisible(true);
+//		this.setVisible(true);
+		if(showAnim) {
+			showingAnim.perform();
+		}else{
+			calcLocation(pluginEntry);
+			this.setVisible(true);
+		}
+	}
+	public void hideWindowList(){
+		hidingAnim.perform();
+	}
+	public void calcLocation(EntryOnBar pluginEntry){
+
+		this.setLocation(LauncherMain.launcherBall.getX()+LauncherMain.launcherBall.getWidth()+15
+				,pluginEntry.getY()+LauncherMain.pluginBar.getY());
 	}
 }

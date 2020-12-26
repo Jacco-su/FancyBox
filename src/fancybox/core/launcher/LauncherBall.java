@@ -49,7 +49,7 @@ public class LauncherBall extends JWindow {
 			if(LauncherMain.pluginBar.isVisible()){
 				LauncherMain.pluginBar.setVisible(false);
 				windowListShowing=LauncherMain.windowList.isVisible();
-				LauncherMain.windowList.setVisible(false);
+				LauncherMain.windowList.hideWindowList();
 				showingWindows.clear();
 				for(FBWindow win:LauncherMain.windowManager.windows){
 					if(win.isVisible()) {
@@ -60,7 +60,8 @@ public class LauncherBall extends JWindow {
 			}else {
 				LauncherMain.pluginBar.showBar();
 				showingWindows.forEach(FBWindow::setVisibleTrue);
-				LauncherMain.windowList.setVisible(windowListShowing);
+				if(windowListShowing)
+					LauncherMain.windowList.showingAnim.perform();
 			}
 			LauncherMain.launcherBall.repaint();
 		}
