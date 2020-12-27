@@ -42,7 +42,6 @@ public class LauncherBall extends JWindow {
 	 * @create 2020/12/14
 	 */
 	private static class MouseBall implements MouseListener{
-		static ArrayList<FBWindow> showingWindows=new ArrayList<>();
 		static boolean windowListShowing=false;
 		@Override
 		public void mouseClicked(MouseEvent e) {
@@ -50,16 +49,16 @@ public class LauncherBall extends JWindow {
 				LauncherMain.pluginBar.setVisible(false);
 				windowListShowing=LauncherMain.windowList.isVisible();
 				LauncherMain.windowList.hideWindowList();
-				showingWindows.clear();
-				for(FBWindow win:LauncherMain.windowManager.windows){
-					if(win.isVisible()) {
-						showingWindows.add(win);
-						win.hidingAnim.perform();
-					}
-				}
+
+				LauncherMain.windowManager.hideAll.perform();
+//				for(FBWindow win:LauncherMain.windowManager.windows){
+//					if(win.isVisible()) {
+//						win.hidingAnim.perform();
+//					}
+//				}
 			}else {
 				LauncherMain.pluginBar.showBar();
-				showingWindows.forEach(FBWindow::performShowAnim);
+				LauncherMain.windowManager.showAll.perform();
 				if(windowListShowing)
 					LauncherMain.windowList.showingAnim.perform();
 			}

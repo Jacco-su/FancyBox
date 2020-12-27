@@ -282,6 +282,9 @@ public class FBWindow extends JWindow {
 		}
 		super.setLocation(getX(),shiftEnd);
 	});
+	public void setSuperVisible(boolean b){
+		super.setVisible(b);
+	}
 	@Override
 	public void setVisible(boolean b){
 		if (b){
