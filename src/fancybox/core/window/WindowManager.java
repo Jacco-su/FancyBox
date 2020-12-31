@@ -46,6 +46,7 @@ public class WindowManager {
 			if (showingWindows.contains(window)) {
 				window.setOpacity(0);
 				window.setSuperVisible(true);
+				window.setSuperLocation(LauncherMain.launcherBall.getX() - window.getWidth(),window.getY());
 			}
 		}
 		for(int i=0;i<=10;i++){
@@ -54,10 +55,7 @@ public class WindowManager {
 					window.setOpacity(1f / 10f * i);
 				}
 			}
-			try {
-				Thread.sleep(5);
-			} catch (Exception ignore) {
-			}
+			try {Thread.sleep(5);} catch (Exception ignore) {}
 		}
 		LauncherMain.windowList.repaint();
 		LauncherMain.pluginBar.repaint();

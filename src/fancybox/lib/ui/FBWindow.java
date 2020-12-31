@@ -383,6 +383,9 @@ public class FBWindow extends JWindow {
 	@Override
 	public void setLocation(int x,int y){}
 
+	public void setSuperLocation(int x,int y){
+		super.setLocation(x, y);
+	}
 	/**
 	 * 覆盖以禁用父类的设置位置方法
 	 * @param p
