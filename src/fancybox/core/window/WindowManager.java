@@ -3,6 +3,7 @@ package fancybox.core.window;
 import fancybox.core.launcher.LauncherMain;
 import fancybox.lib.animation.Animation;
 import fancybox.lib.ui.FBWindow;
+import fancybox.plugin.FBPlugin;
 
 import java.util.ArrayList;
 
@@ -60,5 +61,12 @@ public class WindowManager {
 		LauncherMain.windowList.repaint();
 		LauncherMain.pluginBar.repaint();
 	});
-
+	public FBWindow indexFirstFBWindowByPlugin(FBPlugin plugin){
+		for (FBWindow window:this.windows){
+			if (window.plugin==plugin){
+				return window;
+			}
+		}
+		return null;
+	}
 }

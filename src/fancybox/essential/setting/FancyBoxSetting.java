@@ -2,6 +2,7 @@ package fancybox.essential.setting;
 
 import fancybox.core.launcher.LauncherMain;
 import fancybox.lib.entry.EntryOnBar;
+import fancybox.lib.ui.FBButton;
 import fancybox.lib.ui.FBWindow;
 import fancybox.plugin.FBPlugin;
 
@@ -39,6 +40,12 @@ public class FancyBoxSetting extends FBPlugin {
 		settingMain.setSize(400,200);
 		settingMain.setVisible(true);
 		settingMain.setExitOnClose(true);
+		settingMain.getPanel().setLayout(null);
+
+		//测试按钮
+		FBButton test=new FBButton(this,"testBtn");
+		test.setBounds(20,20,70,40);
+		settingMain.add(test);
 	}
 
 	@Override
